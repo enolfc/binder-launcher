@@ -22,6 +22,7 @@ WRAPPER_FILES = {
     ".binder",
     "pyproject.toml",
     "README.md",
+    "binder_launcher.json",
 }
 
 
