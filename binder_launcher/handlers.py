@@ -9,8 +9,9 @@ import tornado.web
 from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.utils import url_path_join
 
+WORKSPACE_DIR_NAME = "workspace"
 HOME = Path.home()
-WORK = HOME / "workspace"
+WORK = HOME / WORKSPACE_DIR_NAME
 TARGET = WORK / "target"
 ENV_FILE = WORK / ".env"
 KEEP = {".env", ".ipynb_checkpoints"}
@@ -220,7 +221,7 @@ class LaunchHandler(JupyterHandler):
             # Tornado returns bytes; use last value for simplicity.
             params[key] = values[-1].decode("utf-8")
 
-        self.serverapp.log.info(f"Launching with repo={repo}, branch={branch}, urlpath={urlpath}, overwrite={overwrite}, params={params}")
+        self.serverapp.log.info("Received %d parameters", len(params))
 
         try:
             if overwrite:
@@ -245,7 +246,7 @@ class LaunchHandler(JupyterHandler):
             self.write({"status": "error", "message": str(exc)})
             return
 
-        redirect_url = url_path_join(self.base_url, urlpath)
+        redirect_url = url_path_join(self.base_url, urlpath, WORKSPACE_DIR_NAME, notebookpath) if notebookpath else url_path_join(self.base_url, urlpath, WORKSPACE_DIR_NAME)
         self.serverapp.log.info(f"Redirecting to {redirect_url}")
 
-        self.redirect(url_path_join(self.base_url, urlpath))
+        self.redirect(redirect_url)
