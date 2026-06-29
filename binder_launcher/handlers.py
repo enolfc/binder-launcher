@@ -10,7 +10,7 @@ from jupyter_server.base.handlers import JupyterHandler
 from jupyter_server.utils import url_path_join
 
 HOME = Path.home()
-WORK = HOME / "work"
+WORK = HOME / "workspace"
 TARGET = WORK / "target"
 ENV_FILE = WORK / ".env"
 KEEP = {".env", ".ipynb_checkpoints"}
