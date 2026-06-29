@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eux
 
 mkdir -p "$HOME/work"
-export JUPYTER_SERVER_ROOT="$HOME/work"
 
 exec "$@"
