@@ -142,11 +142,23 @@ If `1`, removes wrapper files from `/home/jovyan`.
 
 `data`
 
-no
+Optional URL-encoded JSON describing data files to download after the repository has been staged.
 
-none
+Schema:
 
-URL-encoded JSON describing files to download.
+[
+{
+"url": "https://example.org/data.csv",
+"path": "data/data.csv"
+}
+]
+
+Each object contains:
+
+Field Required Description
+url ✓ HTTP(S) URL of the file to download.
+path
+Destination path relative to the workspace. If omitted, the filename is inferred from the URL.
 
 All other query parameters are written to:
 
