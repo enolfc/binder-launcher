@@ -215,7 +215,7 @@ def shell_escape_env_value(value: str) -> str:
     return shlex.quote(value)
 
 
-def safe_remove_work_contents(work: Path):
+def safe_remove_work_contents(work: Path, log):
     work.mkdir(exist_ok=True)
     for item in work.iterdir():
         if item.name in KEEP:
@@ -458,7 +458,7 @@ class LaunchHandler(JupyterHandler):
 
         try:
             if overwrite:
-                safe_remove_work_contents()
+                safe_remove_work_contents(work, self.serverapp.log)
 
 
             write_env(env_file, params, self.serverapp.log)
