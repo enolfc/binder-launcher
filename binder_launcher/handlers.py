@@ -16,7 +16,6 @@ WORK = HOME / WORKSPACE_DIR_NAME
 TARGET = WORK / "target"
 ENV_FILE = WORK / ".env"
 KEEP = {".env", ".ipynb_checkpoints"}
-RESERVED_PARAMS = {"repo", "branch", "urlpath", "notebookpath", "targetpath", "overwrite", "cleanup", "data"}
 # ENV_PREFIX = "BINDER_PARAM_"
 ENV_PREFIX = ""
 WRAPPER_FILES = {
@@ -26,6 +25,58 @@ WRAPPER_FILES = {
     "pyproject.toml",
     "README.md",
     "binder_launcher.json",
+}
+
+# Reserved query parameters understood by the launcher.
+#
+# repo:          Git repository URL to clone.
+#                Example: https://github.com/recap/DataLens
+#
+# branch:        Optional Git branch, tag, or commit to checkout.
+#                Default: repository default branch.
+#
+# urlpath:       Jupyter URL prefix to redirect to after staging.
+#                Typical values:
+#                  - lab/tree (default)
+#                  - lab
+#                  - tree
+#
+# notebookpath:  Path (relative to the repository root) of the
+#                notebook to open automatically.
+#                Example: notebooks/analysis.ipynb
+#
+# targetpath:    Optional target directory inside the workspace where the
+#                repository should be staged.
+#                Default: workspace root.
+#
+# overwrite:     Whether to overwrite the current workspace before staging.
+#                Values: "1" (default), "1"
+#
+# cleanup:       Whether to remove the wrapper files after launching.
+#                Values: "1" (default), "0"
+#
+# data:          URL-encoded JSON describing data files to download after
+#                staging the repository.
+#                Schema:
+#                [
+#                  {
+#                    "url": "https://example.org/data.csv",
+#                    "path": "data/data.csv"
+#                  }
+#                ]
+#
+# All other query parameters are written to the .env file and made
+# available to the launched notebook.
+
+RESERVED_PARAMS = {
+    "repo",
+    "branch",
+    "urlpath",
+    "notebookpath",
+    "targetpath",
+    "overwrite",
+    "cleanup",
+    "data",
 }
 
 def is_safe_relative_path(path: str) -> bool:
@@ -110,6 +161,7 @@ def stage_data_files(data_json: str | None, log):
 
     log.info("Wrote data manifest: %s", manifest_path)
 
+
 def shell_escape_env_value(value: str) -> str:
     return shlex.quote(value)
 
@@ -123,6 +175,7 @@ def safe_remove_work_contents():
             shutil.rmtree(item)
         else:
             item.unlink()
+
 
 def write_env(params: dict[str, str], log):
     log.info("Writing environment file: %s", ENV_FILE)
@@ -163,6 +216,7 @@ def write_env(params: dict[str, str], log):
         ENV_FILE.stat().st_size,
     )
 
+
 def git_clone(repo: str, branch: str | None, log):
     import shutil as _shutil
 
@@ -198,6 +252,7 @@ def git_clone(repo: str, branch: str | None, log):
         )
 
     log.info("clone target exists=%s contents=%s", TARGET.exists(), list(TARGET.iterdir()))
+
 
 def install_requirements(log):
     pip = shutil.which("pip")
@@ -253,6 +308,7 @@ def install_requirements(log):
         return
 
     log.info("No supported dependency files found.")
+
 
 def copy_target_into_work(log):
     log.info("Copying target repository into work directory")
