@@ -149,24 +149,6 @@ Decoded example:
 ]
 ```
 
-Each object supports:
-
-Field
-
-Required
-
-Description
-
-`url`
-
-yes
-
-HTTP or HTTPS URL to download.
-
-`path`
-
-no
-
 Destination path relative to `workspace/`. If omitted, the filename is inferred from the URL.
 
 After staging, the launcher writes:
@@ -182,7 +164,7 @@ Example manifest:
 [
   {
     "url": "https://example.org/data.csv",
-    "path": "data/data.csv",
+    "path": "data.csv",
     "size": 12345
   }
 ]
@@ -193,7 +175,7 @@ The notebook can then read staged files from the workspace:
 ```python
 from pathlib import Path
 
-data_file = Path("data/data.csv")
+data_file = Path("data.csv")
 print(data_file.exists())
 
 ```
@@ -226,16 +208,15 @@ Supported at runtime:
 By default:
 
 ```text
-cleanup=0
+cleanup=1
 
 ```
 
-This keeps the wrapper repository files visible in `/home/jovyan`.
-
-To remove wrapper files after launch:
+This removes the wrapper repository files after launch, leaving only the target repository in `/home/jovyan/workspace`.
+To keep the wrapper repository files visible in `/home/jovyan`:
 
 ```text
-cleanup=1
+cleanup=0
 
 ```
 
@@ -270,7 +251,7 @@ The target repository is copied into:
 
 ```
 
-If `overwrite=1`, existing workspace contents are removed before launch, except:
+If `overwrite=0`, existing workspace contents not overwritten, except:
 
 ```text
 .env
@@ -278,14 +259,7 @@ If `overwrite=1`, existing workspace contents are removed before launch, except:
 
 ```
 
-Use:
-
-```text
-overwrite=0
-
-```
-
-to avoid clearing the workspace before launch.
+Default is `1`
 
 ---
 
@@ -306,7 +280,7 @@ inner = "launch?" + urlencode({
 })
 
 binder_url = (
-    "https://mybinder.org/v2/gh/recap/binder-launcher/main"
+    "https://mybinder.org/v2/gh/recap/binder-launcher/v0.1.1"
     "?urlpath="
     + quote(inner, safe="")
 )
