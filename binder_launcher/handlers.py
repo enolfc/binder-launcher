@@ -79,6 +79,41 @@ RESERVED_PARAMS = {
     "data",
 }
 
+def run_post_build(log):
+    candidates = [
+        TARGET / "binder" / "postBuild",
+        TARGET / ".binder" / "postBuild",
+        TARGET / "postBuild",
+    ]
+
+    for script in candidates:
+        if not script.exists():
+            continue
+
+        log.info("Running postBuild: %s", script)
+
+        script.chmod(script.stat().st_mode | 0o111)
+
+        result = subprocess.run(
+            ["/bin/bash", str(script)],
+            cwd=TARGET,
+            text=True,
+            capture_output=True,
+            env=os.environ.copy(),
+        )
+
+        log.info(result.stdout)
+        log.info(result.stderr)
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"postBuild failed:\n{result.stderr}"
+            )
+
+        return
+
+    log.info("No postBuild script found.")
+
 def is_safe_relative_path(path: str) -> bool:
     p = Path(path)
 
@@ -404,6 +439,7 @@ class LaunchHandler(JupyterHandler):
             write_env(params, self.serverapp.log)
             git_clone(repo, branch, self.serverapp.log)
             install_requirements(self.serverapp.log)
+            run_post_build(self.serverapp.log)
             if cleanup:
                 clean_wrapper_files(HOME, self.serverapp.log)
             copy_target_into_work(self.serverapp.log)
