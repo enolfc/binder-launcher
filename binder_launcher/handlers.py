@@ -423,7 +423,7 @@ class LaunchHandler(JupyterHandler):
         urlpath = self.get_argument("urlpath", "lab/tree")
         notebookpath = self.get_argument("notebookpath", None)
         overwrite = self.get_argument("overwrite", "1") == "1"
-        cleanup = self.get_argument("cleanup", "0") == "1"
+        cleanup = self.get_argument("cleanup", "1") == "1"
         data_json = self.get_argument("data", None)
         run_postbuild = self.get_argument("run_postbuild", "0") == "1"
 
