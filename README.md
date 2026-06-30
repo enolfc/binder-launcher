@@ -42,8 +42,7 @@ The final notebook content is placed under:
 ## Basic launch URL
 
 ```text
-https://mybinder.org/v2/gh/OWNER/BINDER_LAUNCHER_REPO/main?urlpath=launch%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FOWNER%252FTARGET_REPO%26branch%3Dmain%26notebookpath%3Dnotebook.ipynb
-
+https://binder.ethz.ch/v2/gh/recap/binder-launcher/HEAD?urlpath=launch%3Frepo%3Dhttps%3A%2F%2Fgithub.com%2Frecap%2FDataLens%26branch%3Dmain%26notebookpath%3DDataLens_EDA.ipynb%26csv_url%3Dhttps%3A%2F%2Fexample.org%2Fafile.csv%26data%3D%5B%7B%22url%22%3A%22https%3A%2F%2Fraw.githubusercontent.com%2FAria-Dolatabadian%2FPearson-Correlation-Matrix%2Frefs%2Fheads%2Fmain%2Fcorr_data.csv%22%2C%22path%22%3A%22corr_data.csv%22%7D%5D%26cleanup%3D1
 ```
 
 Decoded, the inner launcher route is:
