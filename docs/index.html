@@ -46,14 +46,25 @@
     <h1>Binder File Stager</h1>
     <h3>Generate Binder launch URLs with parameters, staged datasets, and notebook selection.</h3>
     <label>Binder service</label>
-    <select id="binderBase">
+    <select id="binderBase" onchange="toggleCustomBinder()">
+
       <option value="https://mybinder.org">mybinder.org</option>
       <option value="https://replay.notebooks.egi.eu">
         EGI Notebooks Replay
       </option>
       <option value="https://binder.ethz.ch">ETH Binder</option>
       <option value-"https://notebooks.gesis.org/binder">GESIS Binder</option>
+      <option value="custom">Custom…</option>
     </select>
+
+    <div id="customBinderContainer" style="display:none; margin-top:0.5rem;">
+      <label>Custom BinderHub URL</label>
+      <input
+        id="customBinderBase"
+        type="url"
+        placeholder="https://binder.example.org"
+      />
+    </div>
 
     <!-- <label>Binder launcher repo</label> -->
     <!-- <input id="launcherRepo" value="recap/binder-launcher" /> -->
@@ -135,6 +146,13 @@ CSV_URL=https://example.org/data.csv</textarea
     <button onclick="launchBinder()">🚀 Launch Binder</button>
 
     <script>
+    function toggleCustomBinder() {
+        const custom =
+            document.getElementById("binderBase").value === "custom";
+
+        document.getElementById("customBinderContainer").style.display =
+            custom ? "block" : "none";
+    }
     // function addDataFile(url = "", path = "") {
     //     const container = document.getElementById("dataFiles");
     //
@@ -329,9 +347,21 @@ CSV_URL=https://example.org/data.csv</textarea
 
         const launchUrlpath = "launch?" + inner.toString();
 
-        const binderBase = document
-          .getElementById("binderBase")
-          .value.replace(/\/$/, "");
+        // const binderBase = document
+        //   .getElementById("binderBase")
+        //   .value.replace(/\/$/, "");
+      let binderBase = document.getElementById("binderBase").value;
+
+      if (binderBase === "custom") {
+          binderBase = document.getElementById("customBinderBase").value.trim();
+
+          if (!binderBase) {
+              alert("Please enter a BinderHub URL.");
+              return;
+          }
+      }
+
+      binderBase = binderBase.replace(/\/$/, "");
 
         const binderUrl =
           `${binderBase}/v2/gh/${launcherRepo}/${launcherRef}` +
