@@ -6,13 +6,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "binder-launcher"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
     "jupyter_server",
     "jupyterlab",
-    "tornado",
     "python-dotenv",
-    "nbgitpuller",
 ]
 
 
