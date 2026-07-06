@@ -23,6 +23,7 @@ WRAPPER_FILES = {
     "binder_launcher.json",
     "Makefile",
     "LICENSE",
+    "Dockerfile",
     "docker-compose.yml",
     "scripts",
     "defs",
