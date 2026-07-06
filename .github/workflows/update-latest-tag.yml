@@ -1,0 +1,22 @@
+name: Update latest tag
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  latest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Move latest tag
+        run: |
+          git tag -f latest "$GITHUB_SHA"
+          git push origin refs/tags/latest --force
