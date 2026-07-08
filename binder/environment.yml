@@ -1,0 +1,8 @@
+name: binder-launcher 
+channels:
+  - conda-forge
+dependencies:
+  - python=3.14
+  - python-dotenv
+  - jupyter-server
+  - jupyterlab
